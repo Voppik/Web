@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+/* Hlavní obsah */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #676767;
+    overflow-y: auto; /* Aby šlo scrollovat, když je tabulka dlouhá */
+}
+
+/* Tabulka */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Interakce s řádky */
+tbody tr {
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Třída pro vybraný řádek (přidá JS) */
+tbody tr.selected {
+    background-color: #b3e5fc !important; /* Musí být */
+}
+
+h1 {
+    color: #f1f1f1;
+}
+

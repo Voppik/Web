@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+/* Hlavní obsah */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #676767;
+    overflow-y: auto; /* Aby šlo scrollovat, když je tabulka dlouhá */
+}
+
+/* Tabulka */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Interakce s řádky */
+tbody tr {
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Třída pro vybraný řádek (přidá JS) */
+tbody tr.selected {
+    background-color: #b3e5fc !important; /* Musí být */
+}
+
+h1 {
+    color: #f1f1f1;
+    text-align: center;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+p {
+    text-align: center;
+}
+
+img {
+    display: block;       /* 1. Udělá z obrázku blokový prvek */
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    height: auto;
+    border: 18px solid #292525;
+}
+
+#srovnani {
+    grid-column: span 2;
+}
+
+.grid-layout {
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dva sloupce */
+    gap: 20px;
+    padding: 0 10px;
+}
+
+/* Toto zajistí zakulacení, o které vám jde */
+section {
+    color: #f1f1f1;
+    background: #333333;
+    padding: 20px;
+    border-radius: 20px; /* Tady si nastavte "kulatost" dle libosti */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px; /* Mezera od obrázku nahoře */
+}
+
+#nahore {
+    grid-column: span 2;
+    margin-top: 10px;
+}

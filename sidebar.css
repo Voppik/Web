@@ -1,0 +1,42 @@
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Tlačítka pod sebou */
+    gap: 10px; /* Mezera mezi tlačítky */
+    flex-shrink: 0;
+}
+
+.sidebar button {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #777;
+}
+
+.sidebar button#btn-remove {
+    background-color: #d9534f; /* Červená pro mazání */
+}
+
+.sidebar button#btn-remove:hover {
+    background-color: #c9302c;
+}
+
+/* Styl pro "rozsvícené" tlačítko */
+.sidebar button.active {
+    background-color: #4CAF50; /* Zelená barva */
+    color: white;
+    box-shadow: 0 0 10px #4CAF50; /* Záře */
+    font-weight: bold;
+}

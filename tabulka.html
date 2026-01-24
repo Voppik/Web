@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta description="Slovník">
+    <meta keywords="Radost">
+    <title>Tomiho Slovníček</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="tabulka.css">
+</head>
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+        <h3>Menu</h3>
+        <button id="btn-uvod">Úvod</button>
+        <button id="btn-tabulka">Tabulka</button>
+        <button id="btn-tvorba">Tvorba</button>
+        <h3>Nabídka</h3>
+        <button id="btn-add">Přidat</button>
+        <button id="btn-edit">Upravit</button>
+        <button id="btn-remove">Odebrat</button>
+    </aside>
+
+    <main class="main-content">
+        <h1>Seznam pojmů</h1>
+        <table id="data-table">
+            <thead>
+            <tr>
+                <th>Pojem</th>
+                <th>Kategorie</th>
+                <th>Vysvětlení</th>
+                <th>Poznámka</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </main>
+
+</div>
+<script src="index.js"></script>
+<script src="tabulka.js"></script>
+</body>
+</html>
