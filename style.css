@@ -1,3 +1,37 @@
+/* Přidejte toto globální nastavení pro box-model, aby paddingy nedělaly neplechu */
+* {
+    box-sizing: border-box;
+}
+
+/* Společné zarovnání pro hlavičku i galerii */
+header,
+.grid-layout-galerie {
+    max-width: 1800px;  /* Maximální šířka obsahu (upravte dle potřeby) */
+    width: 100%;        /* Aby se roztáhly na menších displejích */
+    margin-left: auto;  /* Automatický levý okraj = centrování */
+    margin-right: auto; /* Automatický pravý okraj = centrování */
+}
+
+/* Úprava existující třídy .grid-layout-galerie */
+.grid-layout-galerie {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;          /* Zvětšil jsem mezeru, aby to lépe dýchalo */
+    margin-top: 20px;
+    padding: 0;         /* Grid sám o sobě nepotřebuje padding, pokud ho má rodič nebo sections */
+}
+
+.kocour {
+    display: block;
+    width: 100%;        /* Obrázek se roztáhne na šířku rodiče */
+    max-width: 750px;   /* Ale nikdy nebude širší než 750px */
+    height: auto;       /* Zachová poměr stran */
+    /* Zbytek vašich stylů zůstává... */
+}
+
+.kocour :hover {
+
+}
 
 body {
     margin: 0;
@@ -84,8 +118,6 @@ img {
     box-shadow: 0 2px 5px rgba(0,0,0,0.6);
     height: auto;
     border: 18px solid #292525;
-    border-bottom: none; /* Tato řádka zruší spodní linku */
-
 }
 
 #srovnani {
@@ -200,6 +232,7 @@ h3 {
 
 .grid-layout-galerie {
     display: grid;
+    grid-column: span 2;
     grid-template-columns: 1fr 1fr;
     margin-top: 20px; /* Mezera od obrázku nahoře */
     gap: 10px;
