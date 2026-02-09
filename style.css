@@ -119,6 +119,7 @@ section {
     border-radius: var(--radius-medium);
     text-align: center;
     box-shadow: var(--shadow-strong);
+    width: 100%;
 }
 
 /* =========================
@@ -216,3 +217,4 @@ img {
     font-size: x-large;
     border-radius: 0 0 var(--radius-medium) var(--radius-medium);
 }
+
