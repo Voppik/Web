@@ -100,9 +100,7 @@ a:hover {
     overflow-y: auto;
 }
 
-header,
 .grid-layout-galerie {
-    max-width: 1800px;
     width: 100%;
     padding: 20px;
     margin-bottom: 20px;
@@ -119,6 +117,7 @@ section {
     border-radius: var(--radius-medium);
     text-align: center;
     box-shadow: var(--shadow-strong);
+    margin-bottom: 20px;
 }
 
 /* =========================
@@ -182,11 +181,11 @@ img {
     border-radius: var(--radius-small);
     border: var(--image-border);
     box-shadow: var(--shadow-soft);
+    width: 100%;
 }
 
 .kocour {
     width: 100%;
-    max-width: 750px;
 }
 
 .preview {
@@ -216,5 +215,4 @@ img {
     font-size: x-large;
     border-radius: 0 0 var(--radius-medium) var(--radius-medium);
 }
-
 
