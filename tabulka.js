@@ -1,100 +1,145 @@
+// 1. URL a KEY jsou v pořádku (pokud jsou z tvého Supabase)
+const SUPABASE_URL = 'https://empyrofcsvuvcitjljiz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtcHlyb2Zjc3Z1dmNpdGpsaml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NDQ1MjksImV4cCI6MjA4NTMyMDUyOX0.tSK20tp2eKId6imTRP4xfq-03yPEX0pdvk7GFsRu2mw';
+
+// Tady byla chyba - knihovna sama vytvoří objekt 'supabase', my z něj jen vytvoříme klienta
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const tableBody = document.querySelector('#data-table tbody');
 let selectedRow = null;
 
-// 1. Pevné pojmy (vždy budou vidět po načtení)
-const vychoziData = [
-    ["Kandidátní klíč", "Databáze", "Atribut nebo kombinace atributů v tabulce, které mohou jednoznačně identifikovat každý záznam v této tabulce, potenciální primární klíče, z nichž jeden je vybrán jako primární klíč, nesmí osahovat hodnotu null", "Unikátní identifikátor řádku"],
-    ["Povinný vztah entit", "Databáze", "Instance entity je propojená, např. třída musí mít třídního učitele", "Vztah, který musí existovat"],
-    ["Nepovinný vztah entit", "Databáze", "Instance entity nemusí být propojená, např. registrovaný zákazník - objednávka, nemusí mít objednávku když je registrovaný", "Volitelné propojení dat"],
-    ["Vztah entit", "Databáze", "To co spojuje entity, povinný/nepovinný, v diagramech kosočtverec", "Logická vazba mezi tabulkami"],
-    ["Mac adresa", "Operační systémy", "Fyzická adresa zařízení, unikátní, 6 bytů, první 3 od výrobce, další 3 už opravdu unikátní, používá se jako identifikátor v lokální síti", "Fyzická adresa síťového hardwaru"],
-    ["Topologie počítačových sítí", "Počítačové sítě", "Určuje, jak jsou jednotlivá zařízení v síti uspořádána a vzájemně propojena", "Architektura zapojení sítě"],
-    ["Asimetrický člověk", "Různé", "Takový člověk je asi metr vysoký a asi metr široký", "Nesouměrnost proporcí"]
-];
-
-// --- LOGIKA UKLÁDÁNÍ ---
-// Vykreslí data do řádku
-const fillRow = (row, data) => {
-    row.innerHTML = data.map(text => `<td>${text || ''}</td>`).join('');
+// ---------- utils ----------
+const formatDate = (value) => {
+    if (!value) return '-';
+    // Převede ISO formát z databáze na hezký český čas
+    return new Date(value).toLocaleString('cs-CZ', { dateStyle: 'short', timeStyle: 'short' });
 };
 
-// Uloží aktuální stav tabulky do LocalStorage
-const saveToStorage = () => {
-    const rows = [...tableBody.querySelectorAll('tr')];
-    const data = rows.map(row => [...row.cells].map(td => td.innerText));
-    localStorage.setItem('mojeData', JSON.stringify(data));
+const fillRow = (row, item) => {
+    row.dataset.id = item.id;
+    row.innerHTML = `
+        <td>${item.pojem ?? ''}</td>
+        <td>${item.kategorie ?? ''}</td>
+        <td>${item.vysvetleni ?? ''}</td>
+        <td>${item.poznamka ?? ''}</td>
+        <td>${formatDate(item.created_at)}</td>
+        <td>${formatDate(item.updated_at)}</td> 
+    `;
+};
+// POZOR: v Supabase se sloupec pro úpravu jmenuje standardně updated_at, ne edited_at
+
+// ---------- load ----------
+const loadData = async () => {
+    tableBody.innerHTML = `<tr><td colspan="6">Načítání…</td></tr>`;
+
+    const { data, error } = await db
+        .from('pojmy')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        console.error("Chyba ze Supabase:", error);
+        tableBody.innerHTML = `<tr><td colspan="6">Chyba načítání: ${error.message}</td></tr>`;
+        return;
+    }
+
+    tableBody.innerHTML = '';
+    if (data.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6">Databáze je prázdná.</td></tr>`;
+    } else {
+        data.forEach(item => {
+            const row = tableBody.insertRow();
+            fillRow(row, item);
+        });
+    }
 };
 
-// Načte data (buď z paměti, nebo z výchozího seznamu)
-const loadFromStorage = () => {
-    const saved = localStorage.getItem('mojeData');
-
-    // Pokud v paměti nic není (první spuštění u lektora), použije vychoziData
-    const data = saved ? JSON.parse(saved) : vychoziData;
-
-    data.forEach(rowData => {
-        const newRow = tableBody.insertRow();
-        fillRow(newRow, rowData);
-    });
-
-    // Pokud jsme načetli výchozí data, rovnou je uložíme, aby s nimi šlo pracovat
-    if (!saved) saveToStorage();
-};
-
-// --- LOGIKA OVLÁDÁNÍ ---
-
-// Načtení dat při startu
-loadFromStorage();
-
-// Výběr řádku kliknutím
-tableBody.onclick = (e) => {
-    const target = e.target.closest('tr');
-    if (!target) return;
+// ---------- selection ----------
+tableBody.addEventListener('click', e => {
+    const row = e.target.closest('tr');
+    if (!row || row.parentElement.tagName === 'THEAD') return;
 
     if (selectedRow) selectedRow.classList.remove('selected');
 
-    if (selectedRow === target) {
+    if (selectedRow === row) {
         selectedRow = null;
     } else {
-        selectedRow = target;
+        selectedRow = row;
         selectedRow.classList.add('selected');
     }
+});
+
+// ---------- CRUD ----------
+document.getElementById('btn-add').onclick = async () => {
+    const p = prompt('Pojem:');
+    const k = prompt('Kategorie:');
+    const v = prompt('Vysvětlení:');
+    const n = prompt('Poznámka:');
+
+    if (!p?.trim()) return;
+
+    const { data, error } = await db
+        .from('pojmy')
+        .insert([{
+            pojem: p,
+            kategorie: k,
+            vysvetleni: v,
+            poznamka: n
+        }])
+        .select()
+        .single();
+
+    if (error) return alert("Chyba při přidávání: " + error.message);
+
+    const row = tableBody.insertRow();
+    fillRow(row, data);
 };
 
-// Tlačítko Přidat
-document.getElementById('btn-add').onclick = () => {
-    const fields = ["Pojem", "Kategorii", "Vysvětlení", "Poznámku"];
-    const data = fields.map(p => prompt(`Zadejte ${p}:`));
+document.getElementById('btn-edit').onclick = async () => {
+    if (!selectedRow) return alert('Vyber řádek kliknutím v tabulce');
 
-    // Kontrola, jestli uživatel nezmáčkl Storno u prvního pole
-    if (data[0] !== null) {
-        fillRow(tableBody.insertRow(), data);
-        saveToStorage();
-    }
+    const id = selectedRow.dataset.id;
+    const p = prompt('Upravit pojem:', selectedRow.cells[0].innerText);
+    const k = prompt('Upravit kategorii:', selectedRow.cells[1].innerText);
+    const v = prompt('Upravit vysvětlení:', selectedRow.cells[2].innerText);
+    const n = prompt('Upravit poznámku:', selectedRow.cells[3].innerText);
+
+    if (!p?.trim()) return;
+
+    const { data, error } = await db
+        .from('pojmy')
+        .update({
+            pojem: p,
+            kategorie: k,
+            vysvetleni: v,
+            poznamka: n,
+            updated_at: new Date()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) return alert("Chyba při úpravě: " + error.message);
+
+    fillRow(selectedRow, data);
 };
 
-// Tlačítko Upravit
-document.getElementById('btn-edit').onclick = () => {
-    if (!selectedRow) return alert("Nejdříve kliknutím vyberte řádek v tabulce!");
+document.getElementById('btn-remove').onclick = async () => {
+    if (!selectedRow) return alert('Vyber řádek');
 
-    const oldData = [...selectedRow.cells].map(td => td.innerText);
-    const fields = ["Pojem", "Kategorii", "Vysvětlení", "Poznámku"];
+    const id = selectedRow.dataset.id;
+    if (!confirm('Opravdu smazat z databáze?')) return;
 
-    const newData = fields.map((p, i) => prompt(`Upravit ${p}:`, oldData[i]));
+    const { error } = await db
+        .from('pojmy')
+        .delete()
+        .eq('id', id);
 
-    if (newData[0] !== null) {
-        fillRow(selectedRow, newData);
-        saveToStorage();
-    }
+    if (error) return alert("Chyba při mazání: " + error.message);
+
+    selectedRow.remove();
+    selectedRow = null;
 };
 
-// Tlačítko Odebrat
-document.getElementById('btn-remove').onclick = () => {
-    if (!selectedRow) return alert("Nejdříve kliknutím vyberte řádek!");
-
-    if (confirm("Opravdu chcete tento pojem smazat?")) {
-        selectedRow.remove();
-        selectedRow = null;
-        saveToStorage();
-    }
-};
+// ---------- init ----------
+loadData();
