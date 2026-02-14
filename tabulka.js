@@ -1,14 +1,13 @@
-// 1. URL a KEY jsou v pořádku (pokud jsou z tvého Supabase)
+// ---------- KONFIGURACE SUPABASE ----------
 const SUPABASE_URL = 'https://empyrofcsvuvcitjljiz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtcHlyb2Zjc3Z1dmNpdGpsaml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NDQ1MjksImV4cCI6MjA4NTMyMDUyOX0.tSK20tp2eKId6imTRP4xfq-03yPEX0pdvk7GFsRu2mw';
 
-// Tady byla chyba - knihovna sama vytvoří objekt 'supabase', my z něj jen vytvoříme klienta
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const tableBody = document.querySelector('#data-table tbody');
 let selectedRow = null;
 
-// ---------- utils ----------
+// ---------- UTILS (Pomocné funkce) ----------
 const formatDate = (value) => {
     if (!value) return '-';
     // Převede ISO formát z databáze na hezký český čas
@@ -26,35 +25,63 @@ const fillRow = (row, item) => {
         <td>${formatDate(item.updated_at)}</td> 
     `;
 };
-// POZOR: v Supabase se sloupec pro úpravu jmenuje standardně updated_at, ne edited_at
 
-// ---------- load ----------
-const loadData = async () => {
-    tableBody.innerHTML = `<tr><td colspan="6">Načítání…</td></tr>`;
+// ---------- NAČÍTÁNÍ A VYHLEDÁVÁNÍ ----------
+const loadData = async (searchTerm = '') => {
+    tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Načítání…</td></tr>`;
 
-    const { data, error } = await db
+    let query = db
         .from('pojmy')
         .select('*')
         .order('created_at', { ascending: true });
 
+    // Pokud uživatel zadal hledaný text, přidáme SQL filtr
+    if (searchTerm.trim() !== '') {
+        // Hledá searchTerm v pojmu NEBO v kategorii (ignoruje velikost písmen)
+        query = query.or(`pojem.ilike.%${searchTerm}%,kategorie.ilike.%${searchTerm}%`);
+    }
+
+    const { data, error } = await query;
+
     if (error) {
         console.error("Chyba ze Supabase:", error);
-        tableBody.innerHTML = `<tr><td colspan="6">Chyba načítání: ${error.message}</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="6" style="color:red; text-align:center;">Chyba načítání: ${error.message}</td></tr>`;
         return;
     }
 
     tableBody.innerHTML = '';
+
     if (data.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="6">Databáze je prázdná.</td></tr>`;
-    } else {
-        data.forEach(item => {
-            const row = tableBody.insertRow();
-            fillRow(row, item);
-        });
+        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Žádné výsledky neodpovídají hledání.</td></tr>`;
+        return;
     }
+
+    data.forEach(item => {
+        const row = tableBody.insertRow();
+        fillRow(row, item);
+    });
 };
 
-// ---------- selection ----------
+// --- Logika vyhledávání s opožděním (Debounce) ---
+let searchTimeout;
+const searchInput = document.getElementById('search-input');
+
+// Podmínka, aby to neházelo chybu, pokud v HTML ještě nemáš input s id="search-input"
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        const value = e.target.value;
+
+        // Zrušíme předchozí plánované hledání
+        clearTimeout(searchTimeout);
+
+        // Naplánujeme nové hledání za 300ms
+        searchTimeout = setTimeout(() => {
+            loadData(value);
+        }, 300);
+    });
+}
+
+// ---------- VÝBĚR ŘÁDKU ----------
 tableBody.addEventListener('click', e => {
     const row = e.target.closest('tr');
     if (!row || row.parentElement.tagName === 'THEAD') return;
@@ -69,7 +96,7 @@ tableBody.addEventListener('click', e => {
     }
 });
 
-// ---------- CRUD ----------
+// ---------- CRUD (Přidat, Upravit, Smazat) ----------
 document.getElementById('btn-add').onclick = async () => {
     const p = prompt('Pojem:');
     const k = prompt('Kategorie:');
@@ -141,5 +168,6 @@ document.getElementById('btn-remove').onclick = async () => {
     selectedRow = null;
 };
 
-// ---------- init ----------
+// ---------- INICIALIZACE ----------
+// Načte data hned po spuštění stránky
 loadData();
