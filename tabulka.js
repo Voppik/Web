@@ -35,16 +35,6 @@ const loadData = async (searchTerm = '') => {
         .select('*')
         .order('created_at', { ascending: true });
 
-    let query = db
-        .from('kategorie')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-    let query = db
-        .from('vysvetleni')
-        .select('*')
-        .order('created_at', { ascending: true });
-
     // Pokud uživatel zadal hledaný text, přidáme SQL filtr
     if (searchTerm.trim() !== '') {
         // Hledá searchTerm v pojmu NEBO v kategorii (ignoruje velikost písmen)
@@ -182,3 +172,4 @@ document.getElementById('btn-remove').onclick = async () => {
 // Načte data hned po spuštění stránky
 
 loadData();
+
