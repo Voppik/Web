@@ -13,9 +13,8 @@
     <link rel="stylesheet" href="styledva.css">
 </head>
 <body>
-
+    <button id="btn-mobilmenu" class="hamburger">☰</button>
 <div class="container">
-
     <aside class="sidebar">
         <h3>Menu</h3>
         <button id="btn-uvod">Úvod</button>
@@ -28,7 +27,6 @@
         <button id="btn-edit">Upravit</button>
         <button id="btn-remove">Odebrat</button>
     </aside>
-
     <main class="main-content">
         <header>
             <h2>Tabulka</h2>
@@ -36,7 +34,6 @@
                 <input type="text" id="search-input" placeholder="Hledat v pojmech nebo kategoriích..." autocomplete="off">
             </div>
         </header>
-
         <table id="data-table">
             <thead>
             <tr>
@@ -52,11 +49,9 @@
             </tbody>
         </table>
     </main>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="tabulka.js"></script>
 <script src="index.js"></script>
 </body>
 </html>
-
