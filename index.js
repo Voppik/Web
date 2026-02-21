@@ -1,56 +1,84 @@
 console.log('Happy developing ✨')
+
 // --- 1. ČÁST: Bezpečné přidání odkazů ---
-// Tato funkce přidá odkaz jen tehdy, pokud tlačítko na stránce skutečně existuje
 function pridatOdkaz(idTlacitka, cilovaAdresa) {
     const tlacitko = document.getElementById(idTlacitka);
-    if (tlacitko) {
-        tlacitko.addEventListener("click", function() {
+    if (!tlacitko) return;
+
+    tlacitko.addEventListener("click", function() {
+        if (idTlacitka === "btn-mobilmenu") {
+            // Získání čistého názvu stránky (ošetření pro index)
+            let page = window.location.pathname.split("/").pop().split(".")[0];
+            if (page === "" || page === "index") page = "uvod"; // Sjednotíme index na "uvod"
+
+            window.location.href = `mobilmenu.html?from=${page}`;
+        } else {
             window.location.href = cilovaAdresa;
-        });
-    }
+        }
+    });
 }
 
-// Definice odkazů - pokud některé tlačítko na stránce chybí, tento kód to ignoruje a jede dál
+// Registrace odkazů
 pridatOdkaz("btn-uvod", "index.html");
 pridatOdkaz("btn-ukoly", "ukoly.html");
 pridatOdkaz("btn-tabulka", "tabulka.html");
 pridatOdkaz("btn-projekty", "projekty.html");
 pridatOdkaz("btn-galerie", "galerie.html");
+pridatOdkaz("btn-mobilmenu", "mobilmenu.html");
 
 
 // --- 2. ČÁST: Zvýraznění aktivního tlačítka ---
 function highlightActiveButton() {
-    const currentPath = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+    const fromPage = params.get('from');
+    const path = window.location.pathname.toLowerCase();
 
-    // Najdeme všechna tlačítka v sidebaru
-    const buttons = document.querySelectorAll('.sidebar button');
+    const buttons = document.querySelectorAll('.sidebar button, .fullscreen-sidebar button');
 
     buttons.forEach(button => {
-        // Pro jistotu nejdřív zrušíme aktivní třídu u všech
         button.classList.remove("active");
 
-        // Podmínky pro zvýraznění
-        // Používáme "includes", aby to fungovalo i když je adresa složitější
-        if (currentPath.includes("index") && button.id === "btn-uvod") {
+        // A) Pokud jsme v mobilním menu (přes parametr ?from=)
+        if (fromPage && button.id === `btn-${fromPage}`) {
             button.classList.add("active");
         }
-        else if (currentPath.includes("tvorba") && button.id === "btn-tvorba") {
-            button.classList.add("active");
-        }
-        else if (currentPath.includes("ukoly") && button.id === "btn-ukoly") {
-            button.classList.add("active");
-        }
-        else if (currentPath.includes("tabulka") && button.id === "btn-tabulka") {
-            button.classList.add("active");
-        }
-        else if (currentPath.includes("projekty") && button.id === "btn-projekty") {
-            button.classList.add("active");
-        }
-        else if (currentPath.includes("galerie") && button.id === "btn-galerie") {
-            button.classList.add("active");
+        // B) Pokud jsme na klasické stránce (podle URL)
+        else {
+            // Ošetření pro index (pokud je cesta "/" nebo obsahuje "index")
+            const isIndex = path.endsWith("/") || path.includes("index.html");
+
+            if (isIndex && button.id === "btn-uvod") {
+                button.classList.add("active");
+            } else if (path.includes("tabulka") && button.id === "btn-tabulka") {
+                button.classList.add("active");
+            } else if (path.includes("ukoly") && button.id === "btn-ukoly") {
+                button.classList.add("active");
+            } else if (path.includes("projekty") && button.id === "btn-projekty") {
+                button.classList.add("active");
+            } else if (path.includes("galerie") && button.id === "btn-galerie") {
+                button.classList.add("active");
+            }
         }
     });
 }
 
-// Spustíme funkci hned po načtení
 highlightActiveButton();
+
+// --- 3. ČÁST: Tlačítko zpět (v mobilmenu.html) ---
+const backBtn = document.getElementById('btn-back');
+if (backBtn) {
+    backBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const params = new URLSearchParams(window.location.search);
+        const from = params.get('from');
+
+        // Pokud se vracíme z "uvod", jdeme na index.html
+        if (from === 'uvod') {
+            window.location.href = "index.html";
+        } else if (from) {
+            window.location.href = from + ".html";
+        } else {
+            window.location.href = "index.html"; // Defaultní návrat
+        }
+    });
+}
