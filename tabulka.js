@@ -38,7 +38,7 @@ const loadData = async (searchTerm = '') => {
     // Pokud uživatel zadal hledaný text, přidáme SQL filtr
     if (searchTerm.trim() !== '') {
         // Hledá searchTerm v pojmu NEBO v kategorii (ignoruje velikost písmen)
-        query = query.or(`pojem.ilike.%${searchTerm}%,kategorie.ilike.%${searchTerm}%`);
+        query = query.or(`pojem.ilike.%${searchTerm}%,kategorie.ilike.%${searchTerm}%,vysvetleni.ilike.%${searchTerm}%`);
     }
 
     const { data, error } = await query;
@@ -172,4 +172,5 @@ document.getElementById('btn-remove').onclick = async () => {
 // Načte data hned po spuštění stránky
 
 loadData();
+
 
