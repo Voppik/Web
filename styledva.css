@@ -256,6 +256,13 @@ img {
 /* =========================
    PROZÍRAVÝ UKRYJE SE
 ========================= */
+@media (max-width: 768px) {
+    header {
+       background-colour: var(--bg-body);
+       border: var(--bg-body);
+       shadow: var(--bg-body);
+    } 
+}
 
 
 
