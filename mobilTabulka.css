@@ -65,7 +65,7 @@ button {
 }
 
 /* Hover – výchozí */
-.sidebar button:hover {
+button:hover {
     background-color: var(--bg-button-hover);
 }
 
@@ -101,7 +101,7 @@ button {
    AKTIVNÍ TLAČÍTKO
 ========================= */
 
-.sidebar button.active {
+button.active {
     background-color: var(--bg-success);
     box-shadow: var(--shadow-active);
     font-weight: bold;
@@ -138,5 +138,6 @@ Pro mobil (<= 768px)
         display: block; /* Zrušíme flex, aby obsah nebyl vedle (neexistujícího) sidebaru */
     }
 }
+
 
 
