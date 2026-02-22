@@ -137,6 +137,8 @@ Pro mobil (<= 768px)
     body {
         display: block; /* Zrušíme flex, aby obsah nebyl vedle (neexistujícího) sidebaru */
     }
+    header {
+        width: 692px;
 }
 
 
