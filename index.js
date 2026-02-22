@@ -25,7 +25,7 @@ pridatOdkaz("btn-tabulka", "tabulka.html");
 pridatOdkaz("btn-projekty", "projekty.html");
 pridatOdkaz("btn-galerie", "galerie.html");
 pridatOdkaz("btn-mobilmenu", "mobilmenu.html");
-
+pridatOdkaz("btn-mobilTabulka", "mobilTabulka.html");
 
 // --- 2. ČÁST: Zvýraznění aktivního tlačítka ---
 function highlightActiveButton() {
