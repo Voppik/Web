@@ -257,8 +257,12 @@ img {
    PROZÍRAVÝ UKRYJE SE
 ========================= */
 .ukryje {
-    
+    background: var(--bg-body);
+    shadow: var(--bg-body);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 } 
+
 
 
 
