@@ -257,9 +257,10 @@ img {
    PROZÍRAVÝ UKRYJE SE
 ========================= */
 .ukryje {
-    background-colour: var(--bg-body);
+    background: var(--bg-body);
     box-shadow: var(--bg-body);
 } 
+
 
 
 
