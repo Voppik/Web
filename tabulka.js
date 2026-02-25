@@ -133,6 +133,7 @@ document.getElementById('btn-edit').onclick = async () => {
     const k = prompt('Upravit kategorii:', selectedRow.cells[1].innerText);
     const v = prompt('Upravit vysvětlení:', selectedRow.cells[2].innerText);
     const n = prompt('Upravit poznámku:', selectedRow.cells[3].innerText);
+    const a = prompt('Upravit poznámku:', selectedRow.cells[3].innerText);
 
     if (!p?.trim()) return;
 
@@ -176,6 +177,7 @@ document.getElementById('btn-remove').onclick = async () => {
 // Načte data hned po spuštění stránky
 
 loadData();
+
 
 
 
