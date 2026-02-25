@@ -21,6 +21,7 @@ const fillRow = (row, item) => {
         <td>${item.kategorie ?? ''}</td>
         <td>${item.vysvetleni ?? ''}</td>
         <td>${item.poznamka ?? ''}</td>
+        <td>${item.autor ?? ''}</td>
         <td>${formatDate(item.created_at)}</td>
         <td>${formatDate(item.updated_at)}</td> 
     `;
@@ -38,7 +39,7 @@ const loadData = async (searchTerm = '') => {
     // Pokud uživatel zadal hledaný text, přidáme SQL filtr
     if (searchTerm.trim() !== '') {
         // Hledá searchTerm v pojmu NEBO v kategorii (ignoruje velikost písmen)
-        query = query.or(`pojem.ilike.%${searchTerm}%,kategorie.ilike.%${searchTerm}%,vysvetleni.ilike.%${searchTerm}%,poznamka.ilike.%${searchTerm}%`);
+        query = query.or(`pojem.ilike.%${searchTerm}%,kategorie.ilike.%${searchTerm}%,vysvetleni.ilike.%${searchTerm}%,poznamka.ilike.%${searchTerm}%,autor.ilike.%${searchTerm}%`);
     }
 
     const { data, error } = await query;
@@ -102,6 +103,7 @@ document.getElementById('btn-add').onclick = async () => {
     const k = prompt('Kategorie:');
     const v = prompt('Vysvětlení:');
     const n = prompt('Poznámka:');
+    const a = prompt('Autor:');
 
     if (!p?.trim()) return;
 
@@ -111,7 +113,8 @@ document.getElementById('btn-add').onclick = async () => {
             pojem: p,
             kategorie: k,
             vysvetleni: v,
-            poznamka: n
+            poznamka: n,
+            autor: a,
         }])
         .select()
         .single();
@@ -140,6 +143,7 @@ document.getElementById('btn-edit').onclick = async () => {
             kategorie: k,
             vysvetleni: v,
             poznamka: n,
+            autor: a,
             updated_at: new Date()
         })
         .eq('id', id)
@@ -172,6 +176,7 @@ document.getElementById('btn-remove').onclick = async () => {
 // Načte data hned po spuštění stránky
 
 loadData();
+
 
 
 
