@@ -107,6 +107,10 @@ button.active {
     font-weight: bold;
 }
 
+#btn-mobilTabulka {
+    background-color: var(--bg-button-hover);
+}
+
 /* =========================
    NADPIS
 ========================= */
@@ -140,6 +144,7 @@ Pro mobil (<= 768px)
     header {
         width: 692px;
 }
+
 
 
 
