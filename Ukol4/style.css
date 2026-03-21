@@ -1,0 +1,179 @@
+:root {
+    /* Hlavní barvy */
+    --bg-color: #067a85;
+    --text-color-white: #ffffff;
+    --btn-bg-black: #000000;
+    --btn-hover: #252525;
+    --active-color: #7dff00;
+    --active-hover: #79ed12;
+
+    /* Gradienty */
+    --sidebar-grad-start: #30013c;
+    --sidebar-grad-end: #7940ed;
+    --main-grad-start: #1d8877;
+    --main-grad-end: #060b5c;
+
+    /* Rozměry a mezery */
+    --gap-size: 20px;
+    --padding-size: 20px;
+    --btn-radius: 15px;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    /* font-family: 'Raleway', sans-serif; /* Aplikuje font, který načítáš v HTML */
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================================
+   LEVÝ SLOUPEC (Sidebar)
+   ========================================= */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-size);
+    width: 250px;
+    background: linear-gradient(to top right, var(--sidebar-grad-start), var(--sidebar-grad-end));
+    color: var(--text-color-white);
+    padding: var(--padding-size);
+}
+
+.sidebar h3 {
+    margin: 0;
+    height: 24px;
+    line-height: 24px;
+}
+
+/* =========================================
+   PRAVÝ SLOUPEC (Navigace s částmi)
+   ========================================= */
+nav {
+    background-color: var(--bg-color);
+    /* Přesné dorovnání výšky nadpisu H3 (24px) a horního paddingu (20px) + gapu (20px) ze sidebaru */
+    padding-top: 10px;
+    margin: 0;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-size);
+}
+
+nav li {
+    margin: 0;
+}
+
+/* =========================================
+   TLAČÍTKA (Společné styly pro obě menu)
+   ========================================= */
+aside a,
+nav li a {
+    display: block;
+    padding: 15px;
+    margin: 0;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--text-color-white);
+    background-color: var(--btn-bg-black);
+    border: none;
+    border-radius: var(--btn-radius);
+    text-decoration: none;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+aside a:hover,
+nav li a:hover {
+    background-color: var(--btn-hover);
+}
+
+/* Tyto třídy přepisují výchozí barvu tlačítek - !important zajišťuje, že mají přednost */
+.active {
+    background-color: var(--active-color) !important;
+    color: black !important;
+}
+
+.active:hover {
+    background-color: var(--active-hover) !important;
+}
+
+/* =========================================
+   HLAVNÍ OBSAH (Main content)
+   ========================================= */
+.main-content {
+    flex: 1;
+    padding: var(--padding-size);
+    background: linear-gradient(to left, var(--main-grad-start), var(--main-grad-end));
+    color: var(--text-color-white);
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+header h1 {
+    margin-top: 0;
+}
+
+/* =========================================
+   GRID PRO OBRÁZKY
+   ========================================= */
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-size);
+    text-align: center;
+}
+
+.grid-item-dark,
+.grid-item-light {
+    color: var(--text-color-white);
+}
+
+.grid-item-dark img {
+    /* Místo pevných 480px je lepší dát 100% s max šířkou, aby se grid nerozbil na menším monitoru */
+    width: 100%;
+    max-width: 480px;
+    border: solid var(--main-grad-start) 20px;
+    border-radius: var(--btn-radius);
+    box-sizing: border-box;
+}
+
+.grid-item-light img {
+    width: 100%;
+    max-width: 480px;
+    border: solid var(--main-grad-end) 20px;
+    border-radius: var(--btn-radius);
+    box-sizing: border-box;
+}
+
+.navigation {
+    background-color: var(--main-grad-start);
+    border-radius: var(--btn-radius);
+}
+
+.hamburger {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+        width: 768px;
+    }
+    .hamburger {
+        display: block; /* Zobrazíme hamburger */
+    }
+    body {
+
+    }
+}
