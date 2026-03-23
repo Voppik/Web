@@ -22,7 +22,7 @@
 body {
     margin: 0;
     background-color: var(--bg-color);
-    /* font-family: 'Raleway', sans-serif; /* Aplikuje font, který načítáš v HTML */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;/* font-family: 'Raleway', sans-serif; /* Aplikuje font, který načítáš v HTML */
 }
 
 .wrapper {
@@ -137,21 +137,28 @@ header h1 {
 .grid-item-dark,
 .grid-item-light {
     color: var(--text-color-white);
+    line-height: 1.6;        /* Větší mezery mezi řádky pro vzdušnost */
+    max-width: 600px;        /* Text se nebude roztahovat přes celou obrazovku */
+    margin: 20px auto;       /* Vycentruje celý blok na střed stránky */
+    text-align: left;        /* Zarovnání doleva */
+}
+
+.hlava {
+    grid-column: span 2;
 }
 
 .grid-item-dark img {
-    /* Místo pevných 480px je lepší dát 100% s max šířkou, aby se grid nerozbil na menším monitoru */
     width: 100%;
-    max-width: 480px;
-    border: solid var(--main-grad-start) 20px;
+    max-width: 700px;
+    border: solid var(--main-grad-start) 10px;
     border-radius: var(--btn-radius);
     box-sizing: border-box;
 }
 
 .grid-item-light img {
     width: 100%;
-    max-width: 480px;
-    border: solid var(--main-grad-end) 20px;
+    max-width: 700px;
+    border: solid var(--main-grad-end) 10px;
     border-radius: var(--btn-radius);
     box-sizing: border-box;
 }
@@ -166,14 +173,14 @@ header h1 {
 }
 
 @media (max-width: 768px) {
-    .sidebar {
+    aside {
         display: none;
-        width: 768px;
     }
     .hamburger {
         display: block; /* Zobrazíme hamburger */
     }
     body {
-
+        display: flex;
+        flex-direction: column;
     }
 }
