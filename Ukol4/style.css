@@ -78,7 +78,7 @@ nav li {
 aside a,
 nav li a {
     display: block;
-    padding: 15px;
+    padding: 10px;
     margin: 0;
     font-size: 16px;
     cursor: pointer;
