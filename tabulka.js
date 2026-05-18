@@ -34,7 +34,7 @@ const loadData = async (searchTerm = '') => {
     let query = db
         .from('pojmy')
         .select('*')
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: false });
 
     // Pokud uživatel zadal hledaný text, přidáme SQL filtr
     if (searchTerm.trim() !== '') {
